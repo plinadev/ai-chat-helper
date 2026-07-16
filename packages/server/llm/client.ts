@@ -1,8 +1,12 @@
+import { Ollama } from "ollama";
 import OpenAI from "openai";
+import summarizePrompt from "./prompts/summarize-reviews.txt";
 
 const openAIClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const ollamaClient = new Ollama();
 
 type GenerateTextOptions = {
   model?: string;
@@ -40,5 +44,23 @@ export const llmClient = {
       id: response.id,
       text: response.output_text,
     };
+  },
+
+  async summarizeReviews(reviews: string) {
+    const response = await ollamaClient.chat({
+      model: "tinyllama",
+      messages: [
+        {
+          role: "system",
+          content: summarizePrompt,
+        },
+        {
+          role: "user",
+          content: reviews,
+        },
+      ],
+    });
+
+    return response.message.content;
   },
 };
