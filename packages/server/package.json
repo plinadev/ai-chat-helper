@@ -4,6 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun --watch run index.ts",
     "db:seed": "bun run prisma/seed.ts"
   },
   "devDependencies": {
